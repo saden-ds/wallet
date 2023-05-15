@@ -1,18 +1,18 @@
 from product import Product
 
 class Wish:
-    def __init__(self, name:str, date, products:list(Product)) -> None:
+    def __init__(self, name:str, date:str, products:list[Product]) -> None:
         self.name = name
         self.date = date
         self.products = products
 
-    def get_json_products(self):
-        return [product.get_json_product() for product in self.products]
+    def get_data_products(self):
+        return [product.get_data_product() for product in self.products]
 
-    def get_json_wish(self):
+    def get_data_wish(self):
         data = {
             "name":self.name,
             "date": self.date,
-            "products": self.get_json_products()
+            "products": self.get_data_products()
         }
         return data

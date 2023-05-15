@@ -5,7 +5,7 @@ class Product:
         self.price = price
         self.count = count
 
-    def get_json_product(self):
+    def get_data_product(self):
         data = {
             "name":self.name,
             "price":self.price,
