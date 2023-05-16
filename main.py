@@ -16,8 +16,8 @@ Program.run()
 
 # w = Wish("wish", datetime.now().strftime("%Y-%m-%d %H:%M:%S"), [p])
 
-# wl = Wishlist("bb.json")
+# wl = Wishlist("bb.json", "aa.json")
 # wl.add_wish(w)
-# #wl.use_wish("wish", wal)
+#wl.use_wish("wish", wal)
 
 # wl.save()

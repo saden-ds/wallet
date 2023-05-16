@@ -5,6 +5,7 @@ class Product:
         self.price = price
         self.count = count
 
+    # получение json структуры (без json.dumps -> обычный dict).
     def get_data_product(self):
         data = {
             "name":self.name,
