@@ -1,22 +1,8 @@
-[
-	{"name": "asaasasa", "date": "2023-03-23 12:20:22"},
-	{"name": "asaasasa2", "date": "2023-03-24 12:20:22"}
-]
+{
+	"shortWishList": [
+		{"name": "asaasasa", "date": "2023-03-23 12:20:22"},
+		{"name": "asaasasa2", "date": "2023-03-24 12:20:22"}
+	]
+	 
+}
 
-[
-	{
-		"name": "asaasasa",
-		"date": "2023-03-23 12:20:22",
-		"products": [
-			{"name": "milk", "price": 2.34, "count": 2},
-			{"name": "ice cream", "price": 0.56, "count": 1}
-		]
-	}, {
-		"name": "asaasasa",
-		"date": "2023-03-23 12:20:22",
-		"products": [
-			{"name": "milk", "price": 2.34, "count": 2},
-			{"name": "ice cream", "price": 0.56, "count": 1}
-		]
-	}
-]
