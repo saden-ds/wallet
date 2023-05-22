@@ -2,6 +2,7 @@ from wallet import Wallet
 from transaction import Transaction
 from os import system
 import time
+from operator import itemgetter
 
 class Program:
 	
@@ -33,12 +34,15 @@ class Program:
 		total = 0
 
 		options.setdefault('order', 'asc');
+		options.setdefault('order_column', None)
 		options.setdefault('filter_column', None);
 		options.setdefault('filter_command', None);
 		options.setdefault('filter_value', None);
 
-		if options['order'] == 'desc':
-			transactions = transactions[::-1]
+		if options['order_column'] == 'date':
+			transactions = sorted(transactions, key=itemgetter('date'), reverse = options['order'] == 'desc')
+		elif options['order_column'] == 'amount':
+			transactions = sorted(transactions, key=itemgetter('amount'), reverse = options['order'] == 'desc')
 
 		if transactions:
 			system('clear')
@@ -95,24 +99,35 @@ class Program:
 
 		if command == "1":
 			self.print_transactions()
-		if command == "2":
+		elif command == "2":
 			options = {
 				"order": "asc",
+				"order_column": None,
 				"filter_column": None,
 				"filter_command": None,
 				"filter_value": None
 			}
 
 			print("How you want to sort transactions")
-			print("1: asc")
-			print("2: desc")
+			print("1: date asc")
+			print("2: date desc")
+			print("3: amount asc")
+			print("4: amount desc")
 
 			sort = input("Sort: ")
 
 			if sort == "1":
 				options['order'] = 'asc'
+				options['order_column'] = 'date'
 			elif sort == "2":
 				options['order'] = 'desc'
+				options['order_column'] = 'date'
+			elif sort == "3":
+				options['order'] = 'asc'
+				options['order_column'] = 'amount'
+			elif sort == "4":
+				options['order'] = 'desc'
+				options['order_column'] = 'amount'
 
 			print("Filter transactions by")
 			print("1: date")
