@@ -1,9 +1,13 @@
 from product import Product
+from datetime import datetime
 
 class Wish:
     def __init__(self, name:str, date:str, products:list[Product]) -> None:
         self.name = name
-        self.date = date
+        if len(date) == 0:
+            self.date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        else:
+            self.date = date
         self.products = products
 
     # получение json структуры всех продуктов в желании (без json.dumps -> обычный dict).

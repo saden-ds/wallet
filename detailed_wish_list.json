@@ -1,20 +1,35 @@
 {
     "detailedWishList": [
         {
-            "name": "asaasasa",
+            "name": "my wish list 1",
             "date": "2023-03-23 12:20:22",
             "products": [
-                {"name": "milk", "price": 2.34, "count": 2},
-                {"name": "ice cream", "price": 0.56, "count": 1}
+                {
+                    "name": "milk",
+                    "price": 2.34,
+                    "count": 2
+                },
+                {
+                    "name": "ice cream",
+                    "price": 0.56,
+                    "count": 1
+                }
             ]
         },
-
         {
-            "name": "asaasasa",
+            "name": "short 1",
             "date": "2023-03-23 12:20:22",
             "products": [
-                {"name": "milk", "price": 2.34, "count": 2},
-                {"name": "ice cream", "price": 0.56, "count": 1}
+                {
+                    "name": "milk",
+                    "price": 2.34,
+                    "count": 2
+                },
+                {
+                    "name": "ice cream",
+                    "price": 0.56,
+                    "count": 1
+                }
             ]
         }
     ]
