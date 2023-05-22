@@ -3,6 +3,8 @@ from transaction import Transaction
 from os import system
 import time
 
+from wish_list import Wishlist
+
 class Program:
 	
 	@staticmethod
@@ -15,10 +17,12 @@ class Program:
 		system('clear')
 		
 		while True:
+			system('clear')
 			program.show_balance()
 			program.show_menu()
 
 			if not program.choose_command():
+				program.wish_list.save()
 				system('clear')
 				print("Bye, Bye!")
 				time.sleep(3)
@@ -27,6 +31,43 @@ class Program:
 
 	def __init__(self):
 		self.wallet = Wallet()
+		self.wish_list = Wishlist('detailed_wish_list.json', 'wish_list.json')
+
+
+	def print_wishes(self) -> None:
+
+		max_name_len = 5
+		max_date_len = 5
+
+		for wish in self.wish_list.wish_list:
+			if len(wish.name) > max_name_len:
+				max_name_len = len(wish.name)
+			if len(wish.date) > max_date_len:
+				max_date_len = len(wish.date)
+
+		print(f'+{"-"*(max_name_len+2)}+{"-"*(max_date_len+2)}+')
+		print(f'| Name{" "*(max_name_len-4)} | Date{" "*(max_date_len-4)} |')
+		print(f'+{"-"*(max_name_len+2)}+{"-"*(max_date_len+2)}+')
+
+		for wish in self.wish_list.wish_list:
+			print(f'| {wish.name}{" "*(max_name_len-len(wish.name))} | {wish.date} |')
+		
+		print(f'+{"-"*(max_name_len+2)}+{"-"*(max_date_len+2)}+')
+			
+
+	def print_wish(self, name:str) -> None:
+		wish = self.wish_list.get_wish(name)
+		if wish is None:
+			print('Wish does not exist!')
+
+		print('Wish data:')
+		print(f'Wish name: {name}')
+		print(f'Wish date: {wish.date}')
+		print('\nWish product list:')
+		for product in wish.products:
+			print(f'Product name: {product.name} | Product price: {product.price} | Product count: {product.count}|')
+
+
 
 	def print_transactions(self, options = {}):
 		transactions = self.wallet.get_transactions()
@@ -103,7 +144,7 @@ class Program:
 				"filter_value": None
 			}
 
-			print("How you want to sort transactions")
+			print("How do you want to sort transactions")
 			print("1: asc")
 			print("2: desc")
 
@@ -139,7 +180,7 @@ class Program:
 			self.add_amount()
 		elif command == "4":
 			return False
-
+		input('Press Enter to continue...')
 		return True
 
 

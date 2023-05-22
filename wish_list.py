@@ -15,8 +15,8 @@ class Wishlist:
         self.wish_list.append(wish)
 
     # создание желания и добавление его в список.
-    def create_and_add_wish(self, name:str, date:str, products:list[Product]):
-        wish = Wish(name, date, products)
+    def create_and_add_wish(self, name:str, products:list[Product]):
+        wish = Wish(name, '', products)
         self.add_wish(wish)
 
     # создание продукта (static method)
@@ -24,6 +24,12 @@ class Wishlist:
     def create_product( name:str, price:float, count:int):
         product = Product(name, price, count)
         return product
+
+    def get_wish(self, name:str) -> Wish:
+        for w in self.wish_list:
+            if w.name == name:
+                return w
+        return None
 
     # использование какого то желания (после применения оно удаляется).
     def use_wish(self, name:str, wallet:Wallet):
@@ -37,14 +43,14 @@ class Wishlist:
 
         if wish is None:
             return 0
-        
+
         wish_price = 0.0
 
         for product in wish.products:
             wish_price += product.price
         if wallet.balance < wish_price:
             return 0
-        
+
         wallet.balance -= wish_price
         self.wish_list.remove(wish)
 
@@ -77,6 +83,7 @@ class Wishlist:
             f = open(self.__file_path)
         except IOError:
             f = open(self.__file_path, "w+")
+            f.close()
             return []
 
         # попытка переобразовать json файл в структуру самого класса Wishlist. Если выдаёт ошибку (файл self.__file_path 
