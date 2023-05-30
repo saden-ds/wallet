@@ -5,52 +5,49 @@ class Transaction:
 
 	def __init__(self):
 		now = datetime.now()
-		self.amount = 0
-		self.date = now.strftime("%Y-%m-%d %H:%M:%S")
-		self.error = ''
+		self.__amount = 0
+		self.__date = now.strftime("%Y-%m-%d %H:%M:%S")
+		self.__error = ''
 
-	def set_amount(self, amount):
-		self.amount = amount 
+	def set_amount(self, amount:float) -> None:
+		self.__amount = amount 
 
-	def set_date(self, date):
-		self.date = date 
-
-	def save(self, wallet = None):
+	def save(self, wallet = None) -> bool:
 		if wallet == None:
 			wallet = Wallet()
 
 		self.validate()
 
-		if not self.error:
-			balance = wallet.get_balance() + self.amount 
+		if not self.__error:
+			balance = wallet.get_balance() + self.__amount 
 
 			if balance < 0:
-				self.error = "Negative balance"
+				self.__error = "Negative balance"
 
-		if self.error:
+		if self.__error:
 			return False
 		
 		wallet.add_transaction(self)
 		return True
 
-	def get_amount(self):
-		return self.amount 
+	def get_amount(self) -> float:
+		return self.__amount 
 
-	def get_date(self):
-		return self.date
+	def get_date(self) -> str:
+		return self.__date
 
-	def get_error(self):
-		return self.error
+	def get_error(self) -> str:
+		return self.__error
 
-	def validate(self):
-		self.error = ""
+	def validate(self) -> None:
+		self.__error = ""
 
-		if isinstance(self.amount, float) != True and isinstance(self.amount, int) != True:
-			self.error = "Amount must be float or integer"
+		if isinstance(self.__amount, float) != True and isinstance(self.__amount, int) != True:
+			self.__error = "Amount must be float or integer"
 			return None
 
-		if self.amount == 0:
-			self.error = "Amout must not be zero"
+		if self.__amount == 0:
+			self.__error = "Amout must not be zero"
 			return None 
 
  	
