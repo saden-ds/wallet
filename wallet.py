@@ -3,17 +3,17 @@ import json
 class Wallet:
 
 	def __init__(self):
-		self.balance = 0
-		self.transactions = []
+		self.__balance = 0
+		self.__transactions = []
 		self.read_file()
 
-	def get_balance(self):
-		return self.balance
+	def get_balance(self) -> float:
+		return self.__balance
 
-	def get_transactions(self):
-		return self.transactions
+	def get_transactions(self) -> list:
+		return self.__transactions
 
-	def read_file(self):
+	def read_file(self) -> dict:
 		try: 
 			file = open("wallet.json")
 		except IOError:
@@ -21,22 +21,22 @@ class Wallet:
 
 		try: 
 			data = json.load(file)
-			self.balance = data["balance"]
-			self.transactions = data["transactions"]
+			self.__balance = data["balance"]
+			self.__transactions = data["transactions"]
 		except ValueError:
 			data = {}
-			self.balance = 0
-			self.transactions = []
+			self.__balance = 0
+			self.__transactions = []
 
 		return data
 
-	def add_balance(self, amount):
-		self.balance += amount
+	def add_balance(self, amount:float) -> None:
+		self.__balance += amount
 
-	def save(self):
+	def save(self) -> None:
 		data = {
-			"balance": self.balance,
-			"transactions": self.transactions
+			"balance": self.__balance,
+			"transactions": self.__transactions
 		}
 		json_string = json.dumps(data)	
 		file = open("wallet.json", "w+")
@@ -44,8 +44,8 @@ class Wallet:
 		file.write(json_string)
 		file.close()
 	
-	def add_transaction(self, transaction):
-		self.transactions.append({
+	def add_transaction(self, transaction) -> None:
+		self.__transactions.append({
 			"amount": transaction.get_amount(),
 			"date": transaction.get_date()
 		})
