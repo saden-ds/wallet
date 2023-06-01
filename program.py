@@ -139,6 +139,12 @@ class Program:
 		else:
 			print(transaction.get_error())
 
+	def __delete_transaction(self, date:str) -> None:
+		if self.wallet.delete_transaction(date):
+			print("Transaction " + date + " was successfully deleted!")
+		else:
+			print("Transaction " + date + " not found!")
+
 	def __show_balance(self) -> None:
 		print("+ - - - - - - - - - - + - - - - - - +")
 		print("| Balance:".ljust(22, " ") + "|" + str("{:.2f}".format(self.wallet.get_balance())).rjust(12, " ") + " |")
@@ -149,7 +155,8 @@ class Program:
 		print("1: Show transactions")
 		print("2: Sort / Filter transactions")
 		print("3: Add amount")
-		print("4: Exit")
+		print("4: Delete transaction")
+		print("5: Exit")
 
 	def __choose_command(self) -> bool:
 		
@@ -167,10 +174,10 @@ class Program:
 			}
 
 			print("How do you want to sort transactions")
-			print("1: date asc")
-			print("2: date desc")
-			print("3: amount asc")
-			print("4: amount desc")
+			print("1: date ascending")
+			print("2: date descending")
+			print("3: amount ascending")
+			print("4: amount descending")
 
 			sort = input("Sort: ")
 
@@ -211,6 +218,10 @@ class Program:
 		elif command == "3":
 			self.__add_amount()
 		elif command == "4":
+			self.__print_transactions()
+			date = input("Write a date of transaction witch you wont to delete: ")
+			self.__delete_transaction(date)
+		elif command == "5":
 			return False
 		input('Press Enter to continue...')
 		return True
