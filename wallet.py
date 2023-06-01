@@ -51,4 +51,20 @@ class Wallet:
 		})
 		self.add_balance(transaction.get_amount())
 		self.save()
+	
+	def delete_transaction(self, date:str) -> bool:
+		transactions = []
+		is_founded = False
+
+		for transaction in self.__transactions:
+			if transaction['date'] != date:
+				transactions.append(transaction)
+			else:
+				is_founded = True
 		
+		self.__transactions = transactions
+
+		if is_founded:
+			self.save()
+
+		return is_founded 
