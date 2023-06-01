@@ -2,6 +2,7 @@ from wish import Wish
 import json
 from product import Product
 from wallet import Wallet
+from transaction import Transaction
 
 class Wishlist:
 
@@ -30,28 +31,25 @@ class Wishlist:
             if w.name == name:
                 return w
         return None
+    
+    def delete_wish(self, name:str):
+        if self.get_wish(name) is None:
+            return 0
+        self.wish_list.remove(self.get_wish(name))
 
     # использование какого то желания (после применения оно удаляется).
     def use_wish(self, name:str, wallet:Wallet):
-        wish = None
-        wish_index = 0
-        for w in self.wish_list:
-            if w.name == name:
-                wish = w
-                break
-            wish_index+=1
 
+        wish = self.get_wish(name)
         if wish is None:
             return 0
 
-        wish_price = 0.0
-
-        for product in wish.products:
-            wish_price += product.price
-        if wallet.balance < wish_price:
+        if wallet.get_balance() < wish.fullprice:
             return 0
 
-        wallet.balance -= wish_price
+        new_transaction = Transaction()
+        new_transaction.set_amount(-wish.fullprice)
+        wallet.add_transaction(new_transaction)
         self.wish_list.remove(wish)
 
 

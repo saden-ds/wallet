@@ -65,9 +65,24 @@ class Program:
 		print(f'Wish name: {name}')
 		print(f'Wish date: {wish.date}')
 		print('\nWish product list:')
-		for product in wish.products:
-			print(f'Product name: {product.name} | Product price: {product.price} | Product count: {product.count}|')
 
+		max_product_name_len = 13
+		max_product_price_len = 13
+		max_product_count_len = 13
+
+		for product in wish.products:
+			if len(product.name) > max_product_name_len:
+				max_product_name_len = len(product.name)
+			if len(str(product.price)) > max_product_price_len:
+				max_product_price_len = len(str(product.price))
+			if len(str(product.count)) > max_product_count_len:
+				max_product_count_len = len(str(product.count))
+		print(f'+{"-"*(max_product_name_len+2)}+{"-"*(max_product_price_len+2)}+{"-"*(max_product_count_len+2)}+')
+		print(f'| Product name {" "*(max_product_name_len - 13)} | Product price {" "*(max_product_price_len-13)}| Product count {" "*(max_product_count_len-13)}|')
+		print(f'+{"-"*(max_product_name_len+2)}+{"-"*(max_product_price_len+2)}+{"-"*(max_product_count_len+2)}+')
+		for product in wish.products:
+			print(f'| {product.name + " "*(max_product_name_len-len(product.name))} | {str(product.price)+ " "*(max_product_price_len-len(str(product.price)))} | {str(product.count) + " "*(max_product_count_len- len(str(product.count)))} |')
+		print(f'+{"-"*(max_product_name_len+2)}+{"-"*(max_product_price_len+2)}+{"-"*(max_product_count_len+2)}+')
 
 	def __filter_transactions(self, transactions:list, options:dict = {}) -> list:
 		options.setdefault('filter_column', None);
@@ -156,7 +171,13 @@ class Program:
 		print("2: Sort / Filter transactions")
 		print("3: Add amount")
 		print("4: Delete transaction")
-		print("5: Exit")
+		print("5: Show all wishes")
+		print("6: Show specific wish")
+		print("7: Sort / Filter wishes")
+		print("8: Add wish")
+		print("9: Use wish")
+		print("10: Delete wish")
+		print("11: Exit")
 
 	def __choose_command(self) -> bool:
 		
@@ -222,7 +243,91 @@ class Program:
 			date = input("Write a date of transaction witch you wont to delete: ")
 			self.__delete_transaction(date)
 		elif command == "5":
+			system('clear')
+			self.print_wishes()
+		elif command == "6":
+			system('clear')
+			self.print_wishes()
+			choice = input("Enter wish name to see details: ")
+			if self.wish_list.get_wish(choice) is None:
+				print("Wish does not exist!")
+			else:
+				system('clear')
+				self.print_wish(choice)
+
+		elif command == "7":
+			pass
+	
+		elif command == "8":
+			system('clear')
+
+			while True:
+				wish_name = input("Enter wish name: ")
+				if wish_name.strip() == "":
+					print("Incorrect name. Try again!")
+					continue
+				break
+				
+			products = []
+			while True:
+				product_name = input("Enter product name (if you want to stop adding products, press Enter):")
+				product_price = 0
+				product_count = 0
+				if product_name.strip() == "":
+					break
+				while True:
+					product_price = input("Enter product price: ")
+					try:
+						product_price = float(product_price)
+					except:
+						print("That is not float value. Try again!")
+						continue
+					break
+				while True:
+					product_count = input("Enter product count: ")
+					try:
+						product_count = int(product_count)
+					except:
+						print("That is not integer value. Try again!")
+						continue
+					break
+				products.append(Wishlist.create_product(product_name, product_price, product_count))
+			self.wish_list.create_and_add_wish(wish_name, products)
+
+		elif command == "9":
+			system('clear')
+			self.print_wishes()
+			choice = input("Enter wish name to use it: ")
+			if self.wish_list.get_wish(choice) is None:
+				print("Wish does not exist!")
+			else:
+				system('clear')
+				wish = self.wish_list.get_wish(choice)
+				self.__show_balance()
+				print(f'Wish price: {wish.fullprice}')
+				if self.wallet.get_balance() < wish.fullprice:
+					print("You do not have enough money!")
+				else:
+					print("You have enough money! Do you want to buy it?")
+					print(f"After buying you will have {self.wallet.get_balance()-wish.fullprice}")
+					self.wish_list.use_wish(choice, self.wallet)
+			
+
+		elif command == "10":
+			system('clear')
+			self.print_wishes()
+			choice = input("Enter wish name to delete it: ")
+			if self.wish_list.get_wish(choice) is None:
+				print("Wish does not exist!")
+			else:
+				system('clear')
+				self.wish_list.delete_wish(choice)
+				print(f'Wish {choice} was successfully deleted!')
+
+
+		elif command == "11":
 			return False
+		
 		input('Press Enter to continue...')
 		return True
 

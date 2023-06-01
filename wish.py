@@ -4,6 +4,9 @@ from datetime import datetime
 class Wish:
     def __init__(self, name:str, date:str, products:list[Product]) -> None:
         self.name = name
+        self.fullprice = 0
+        for product in products:
+            self.fullprice += product.price*product.count
         if len(date) == 0:
             self.date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         else:
