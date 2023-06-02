@@ -39,21 +39,24 @@ class Program:
 
 		max_name_len = 5
 		max_date_len = 5
+		max_fullprice_len = 10
 
 		for wish in self.wish_list.wish_list:
 			if len(wish.name) > max_name_len:
 				max_name_len = len(wish.name)
 			if len(wish.date) > max_date_len:
 				max_date_len = len(wish.date)
+			if len(str(wish.fullprice)) > max_fullprice_len:
+				max_fullprice_len = len(str(wish.fullprice))
 
-		print(f'+{"-"*(max_name_len+2)}+{"-"*(max_date_len+2)}+')
-		print(f'| Name{" "*(max_name_len-4)} | Date{" "*(max_date_len-4)} |')
-		print(f'+{"-"*(max_name_len+2)}+{"-"*(max_date_len+2)}+')
+		print(f'+{"-"*(max_name_len+2)}+{"-"*(max_date_len+2)}+{"-"*(max_fullprice_len+2)}+')
+		print(f'| Name{" "*(max_name_len-4)} | Date{" "*(max_date_len-4)} | Full price{" "*(max_fullprice_len-9)}|')
+		print(f'+{"-"*(max_name_len+2)}+{"-"*(max_date_len+2)}+{"-"*(max_fullprice_len+2)}+')
 
 		for wish in self.wish_list.wish_list:
-			print(f'| {wish.name}{" "*(max_name_len-len(wish.name))} | {wish.date} |')
+			print(f'| {wish.name}{" "*(max_name_len-len(wish.name))} | {wish.date}{" "*(max_date_len-len(wish.date))} | {str(wish.fullprice)}{" "*(max_fullprice_len-len(str(wish.fullprice)))} |')
 		
-		print(f'+{"-"*(max_name_len+2)}+{"-"*(max_date_len+2)}+')
+		print(f'+{"-"*(max_name_len+2)}+{"-"*(max_date_len+2)}+{"-"*(max_fullprice_len+2)}+')
 			
 
 	def print_wish(self, name:str) -> None:
