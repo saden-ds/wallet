@@ -148,8 +148,7 @@ class Program:
 		print("+ - - - - - - - - - - + - - - - - - +")
 		print("")
 
-	def __add_amount(self) -> None:
-		amount = input("Write amount: ")
+	def __add_amount(self, amount) -> None:
 		transaction = Transaction()
 		transaction.set_amount(float(amount))
 		if transaction.save(self.wallet):
@@ -217,6 +216,8 @@ class Program:
 			elif sort == "4":
 				options['order'] = 'desc'
 				options['order_column'] = 'amount'
+			else:
+				return True 
 
 			print("Filter transactions by")
 			print("1: date")
@@ -237,13 +238,24 @@ class Program:
 				options['filter_column'] = 'amount'
 				options['filter_command'] = '>='
 				options['filter_value'] =  int(input("Amount greater then: "))
+			else:
+				return True
 
 			self.__print_transactions(options)
 		elif command == "3":
-			self.__add_amount()
+			amount = input("Write amount: ")
+			
+			if amount.strip() == "":
+				return True
+
+			self.__add_amount(amount)
 		elif command == "4":
 			self.__print_transactions()
 			date = input("Write a date of transaction witch you wont to delete: ")
+			
+			if date.strip() == "":
+				return True
+
 			self.__delete_transaction(date)
 		elif command == "5":
 			system('clear')
