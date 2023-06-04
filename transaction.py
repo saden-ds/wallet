@@ -9,8 +9,11 @@ class Transaction:
 		self.__date = now.strftime("%Y-%m-%d %H:%M:%S")
 		self.__error = ''
 
-	def set_amount(self, amount:float) -> None:
-		self.__amount = amount 
+	def set_amount(self, amount) -> None:
+		if isinstance(amount , str) and amount.isnumeric():
+			self.__amount = float(amount)
+		else:
+			self.__amount = amount
 
 	def save(self, wallet = None) -> bool:
 		if wallet == None:
@@ -43,7 +46,7 @@ class Transaction:
 		self.__error = ""
 
 		if isinstance(self.__amount, float) != True and isinstance(self.__amount, int) != True:
-			self.__error = "Amount must be float or integer"
+			self.__error = "Amount must be a number"
 			return None
 
 		if self.__amount == 0:

@@ -13,7 +13,7 @@ class Program:
 		program = Program()
 
 		system('clear')
-		print("Hello, this is your e-wallet. Let's start use it!")
+		print("Hello, this is your e-wallet. Let's start using it!")
 		time.sleep(3)
 		system('clear')
 		
@@ -34,6 +34,22 @@ class Program:
 		self.wallet = Wallet()
 		self.wish_list = Wishlist('detailed_wish_list.json', 'wish_list.json')
 
+	def __get_max_len(self, max_len, value):
+		value_len = len(str(value))
+		
+		if value_len > max_len:
+			max_len = value_len
+	
+		return max_len
+
+	def __column_separator(self, column_len:int) -> str:
+		return "-" * (column_len + 2)
+
+	def __column(self, column_value:str, column_len:int, right:bool = False) -> str:
+		if right:
+			return " " + str(column_value).rjust(column_len, " ") + " "
+		else:
+			return " " + str(column_value).ljust(column_len, " ") + " "
 
 	def print_wishes(self) -> None:
 
@@ -125,32 +141,54 @@ class Program:
 
 		return transactions
 
+	def __get_transactions_total(self, transactions):
+		total = 0
+
+		for transaction in transactions:
+			amount = float(transaction['amount'])
+			total += amount;
+
+		return total
+
 	def __print_transactions(self, options:dict = {}) -> None:
 		transactions = self.wallet.get_transactions()
 		total = 0
+		date_name = "Date"
+		amount_name = "Amount"
+		date_len = len(date_name)
+		amount_len = len(amount_name)
 		
 		transactions = self.__filter_transactions(transactions, options)
 		transactions = self.__sort_transactions(transactions, options)
 
 		if transactions:
 			system('clear')
+
+			total = self.__get_transactions_total(transactions)
+
+			amount_len = self.__get_max_len(amount_len, "{:.2f}".format(total))
+			
+			for transaction in transactions:
+				date_len = self.__get_max_len(date_len, transaction["date"])
+				amount_len = self.__get_max_len(amount_len, "{:.2f}".format(transaction["amount"]))
+		
 			print("Transactions")
-			print("+ - - - - - - - - - - + - - - - - - +")
-			print("| Date".ljust(22, " ") +  "|" +  "Amount".rjust(11, " ") +  "  |")
-			print("+ - - - - - - - - - - + - - - - - - +")
+			print(f'+{self.__column_separator(date_len)}+{self.__column_separator(amount_len)}+')
+			print(f'|{self.__column(date_name, date_len)}|{self.__column(amount_name, amount_len, True)}|')
+			print(f'+{self.__column_separator(date_len)}+{self.__column_separator(amount_len)}+')
+
 			for transaction in transactions:
 				amount = float(transaction['amount'])
-				total += amount;
-				print("| " + str(transaction['date']) + " | " + "{:.2f}".format(amount).rjust(10, " ") + "  |")
-				print("+ - - - - - - - - - - + - - - - - - +")
+				print(f'|{self.__column(transaction["date"], date_len)}|{self.__column("{:.2f}".format(amount), amount_len, True)}|')
+				print(f'+{self.__column_separator(date_len)}+{self.__column_separator(amount_len)}+')
 
-		print("| Total:".ljust(22, " ") + "|" + str("{:.2f}".format(total)).rjust(12, " ") + " |")
-		print("+ - - - - - - - - - - + - - - - - - +")
-		print("")
+			print(f'|{self.__column("Total", date_len)}|{self.__column("{:.2f}".format(total), amount_len, True)}|')
+			print(f'+{self.__column_separator(date_len)}+{self.__column_separator(amount_len)}+')
+			print("")
 
 	def __add_amount(self, amount) -> None:
 		transaction = Transaction()
-		transaction.set_amount(float(amount))
+		transaction.set_amount(amount)
 		if transaction.save(self.wallet):
 			print(amount + " added to wallet!")
 		else:
@@ -163,9 +201,12 @@ class Program:
 			print("Transaction " + date + " not found!")
 
 	def __show_balance(self) -> None:
-		print("+ - - - - - - - - - - + - - - - - - +")
-		print("| Balance:".ljust(22, " ") + "|" + str("{:.2f}".format(self.wallet.get_balance())).rjust(12, " ") + " |")
-		print("+ - - - - - - - - - - + - - - - - - +")
+		balance = "{:.2f}".format(self.wallet.get_balance())
+		balance_len = len(str(balance))
+		name_len = 10
+		print(f'+{self.__column_separator(name_len)}+{self.__column_separator(balance_len)}+')
+		print(f'|{self.__column("Balance:", name_len)}|{self.__column(balance, balance_len, True)}|')
+		print(f'+{self.__column_separator(name_len)}+{self.__column_separator(balance_len)}+')
 
 	def __show_menu(self) -> None:
 		print("Please select an action")
@@ -238,7 +279,7 @@ class Program:
 				options['filter_column'] = 'amount'
 				options['filter_command'] = '>='
 				options['filter_value'] =  int(input("Amount greater then: "))
-			else:
+			elif filt != "4":
 				return True
 
 			self.__print_transactions(options)
@@ -251,7 +292,7 @@ class Program:
 			self.__add_amount(amount)
 		elif command == "4":
 			self.__print_transactions()
-			date = input("Write a date of transaction witch you wont to delete: ")
+			date = input("Write the date of the transaction you want to delete: ")
 			
 			if date.strip() == "":
 				return True
@@ -345,6 +386,3 @@ class Program:
 		
 		input('Press Enter to continue...')
 		return True
-
-
-
