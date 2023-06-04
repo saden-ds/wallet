@@ -10,7 +10,7 @@ class Transaction:
 		self.__error = ''
 
 	def set_amount(self, amount) -> None:
-		if isinstance(amount , str) and amount.strip('-').isnumeric():
+		if isinstance(amount , str) and amount.strip("-").replace(".", "").isnumeric():
 			self.__amount = float(amount)
 		else:
 			self.__amount = amount
