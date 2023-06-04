@@ -1,7 +1,7 @@
 from wallet import Wallet
 from transaction import Transaction
 from os import system
-from datetime import date, datetime
+from datetime import datetime
 import time
 from operator import itemgetter
 from operator import attrgetter
@@ -13,22 +13,22 @@ class Program:
 	@staticmethod
 	def run():
 		program = Program()
-		system('clear')
+		system("cls")
 		print("Hello, this is your e-wallet. Let's start using it!")
 		time.sleep(3)
-		system('clear')
+		system('cls')
 		
 		while True:
-			system('clear')
+			system('cls')
 			program.__show_balance()
 			program.__show_menu()
 
 			if not program.__choose_command():
 				program.wish_list.save()
-				system('clear')
+				system('cls')
 				print("Bye, Bye!")
 				time.sleep(3)
-				system('clear')
+				system('cls')
 				break
 
 	def __init__(self):
@@ -212,11 +212,11 @@ class Program:
 			for wish in temp_wishlist[:]:
 				if wish.fullprice < price:
 					temp_wishlist.remove(wish)
-		system("clear")
+		system("cls")
 		self.print_wishes(temp_wishlist)
 
 	def __print_transactions(self, options:dict = {}) -> None:
-		system('clear')
+		system('cls')
 
 		transactions = self.wallet.get_transactions()
 		date_name = "Date"
@@ -305,7 +305,7 @@ class Program:
 				"filter_value": None
 			}
 
-			system('clear')
+			system('cls')
 
 			print("How do you want to sort transactions")
 			print("1: date ascending")
@@ -369,23 +369,23 @@ class Program:
 
 			self.__delete_transaction(date)
 		elif command == "5":
-			system('clear')
+			system('cls')
 			self.print_wishes(self.wish_list.wish_list)
 		elif command == "6":
-			system('clear')
+			system('cls')
 			self.print_wishes(self.wish_list.wish_list)
 			choice = input("Enter wish name to see details: ")
 			if self.wish_list.get_wish(choice) is None:
 				print("Wish does not exist!")
 			else:
-				system('clear')
+				system('cls')
 				self.print_wish(choice)
 
 		elif command == "7":
 			sort_option = 0
 			filter_option = 0
 			while True:
-				system('clear')
+				system('cls')
 				print('How do you want to sort wishes')
 				print('1: Name ascending')
 				print('2: Name descending')
@@ -407,7 +407,7 @@ class Program:
 				break
 			
 			while True:
-				system('clear')
+				system('cls')
 				print('How do you want to filter wishes')
 				print('1: Name')
 				print('2: Date')
@@ -429,7 +429,7 @@ class Program:
 
 	
 		elif command == "8":
-			system('clear')
+			system('cls')
 
 			while True:
 				wish_name = input("Enter wish name: ")
@@ -474,13 +474,13 @@ class Program:
 				self.wish_list.create_and_add_wish(wish_name, products)
 
 		elif command == "9":
-			system('clear')
+			system('cls')
 			self.print_wishes(self.wish_list.wish_list)
 			choice = input("Enter wish name to use it: ")
 			if self.wish_list.get_wish(choice) is None:
 				print("Wish does not exist!")
 			else:
-				system('clear')
+				system('cls')
 				wish = self.wish_list.get_wish(choice)
 				self.__show_balance()
 				print(f'Wish price: {wish.fullprice}')
@@ -493,13 +493,13 @@ class Program:
 			
 
 		elif command == "10":
-			system('clear')
+			system('cls')
 			self.print_wishes(self.wish_list.wish_list)
 			choice = input("Enter wish name to delete it: ")
 			if self.wish_list.get_wish(choice) is None:
 				print("Wish does not exist!")
 			else:
-				system('clear')
+				system('cls')
 				self.wish_list.delete_wish(choice)
 				print(f'Wish {choice} was successfully deleted!')
 
