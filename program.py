@@ -294,6 +294,9 @@ class Program:
 					product_price = input("Enter product price: ")
 					try:
 						product_price = float(product_price)
+						if product_price <= 0:
+							print("The product price must be positive!")
+							continue
 					except:
 						print("That is not float value. Try again!")
 						continue
@@ -302,6 +305,9 @@ class Program:
 					product_count = input("Enter product count: ")
 					try:
 						product_count = int(product_count)
+						if product_count <= 0:
+							print("The product count must be positive!")
+							continue
 					except:
 						print("That is not integer value. Try again!")
 						continue
