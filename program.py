@@ -1,6 +1,7 @@
 from wallet import Wallet
 from transaction import Transaction
 from os import system
+from datetime import date, datetime
 import time
 from operator import itemgetter
 
@@ -107,7 +108,7 @@ class Program:
 		options.setdefault('filter_column', None);
 		options.setdefault('filter_command', None);
 		options.setdefault('filter_value', None);
-
+		
 		if options['filter_column'] == None:
 			return transactions
 
@@ -126,57 +127,58 @@ class Program:
 					if transaction['amount'] < options['filter_value']:
 						continue
 
-				filtered_transactions.append(transaction)
-
+			filtered_transactions.append(transaction)
+		
 		return filtered_transactions
 
 	def __sort_transactions(self, transactions:list, options:dict = {}) -> list:
 		options.setdefault('order', 'asc');
 		options.setdefault('order_column', None)
-
+		
 		if options['order_column'] == 'date':
 			transactions = sorted(transactions, key=itemgetter('date'), reverse = options['order'] == 'desc')
 		elif options['order_column'] == 'amount':
 			transactions = sorted(transactions, key=itemgetter('amount'), reverse = options['order'] == 'desc')
-
+		
 		return transactions
 
 	def __get_transactions_total(self, transactions):
 		total = 0
 
-		for transaction in transactions:
-			amount = float(transaction['amount'])
-			total += amount;
+		if transactions:
+			for transaction in transactions:
+				amount = float(transaction['amount'])
+				total += amount;
 
 		return total
 
 	def __print_transactions(self, options:dict = {}) -> None:
+		system('clear')
+
 		transactions = self.wallet.get_transactions()
-		total = 0
 		date_name = "Date"
 		amount_name = "Amount"
 		date_len = len(date_name)
 		amount_len = len(amount_name)
-		
+
 		transactions = self.__filter_transactions(transactions, options)
+
 		transactions = self.__sort_transactions(transactions, options)
+		total = self.__get_transactions_total(transactions)
+
+		amount_len = self.__get_max_len(amount_len, "{:.2f}".format(total))
 
 		if transactions:
-			system('clear')
-
-			total = self.__get_transactions_total(transactions)
-
-			amount_len = self.__get_max_len(amount_len, "{:.2f}".format(total))
-			
 			for transaction in transactions:
 				date_len = self.__get_max_len(date_len, transaction["date"])
 				amount_len = self.__get_max_len(amount_len, "{:.2f}".format(transaction["amount"]))
-		
-			print("Transactions")
-			print(f'+{self.__column_separator(date_len)}+{self.__column_separator(amount_len)}+')
-			print(f'|{self.__column(date_name, date_len)}|{self.__column(amount_name, amount_len, True)}|')
-			print(f'+{self.__column_separator(date_len)}+{self.__column_separator(amount_len)}+')
 
+		print("Transactions")
+		print(f'+{self.__column_separator(date_len)}+{self.__column_separator(amount_len)}+')
+		print(f'|{self.__column(date_name, date_len)}|{self.__column(amount_name, amount_len, True)}|')
+		print(f'+{self.__column_separator(date_len)}+{self.__column_separator(amount_len)}+')
+
+		if transactions:
 			for transaction in transactions:
 				amount = float(transaction['amount'])
 				print(f'|{self.__column(transaction["date"], date_len)}|{self.__column("{:.2f}".format(amount), amount_len, True)}|')
@@ -184,7 +186,10 @@ class Program:
 
 			print(f'|{self.__column("Total", date_len)}|{self.__column("{:.2f}".format(total), amount_len, True)}|')
 			print(f'+{self.__column_separator(date_len)}+{self.__column_separator(amount_len)}+')
-			print("")
+		else:
+			print(f'+{self.__column_separator(date_len)}+{self.__column_separator(amount_len)}+')
+
+		print("")
 
 	def __add_amount(self, amount) -> None:
 		transaction = Transaction()
@@ -237,6 +242,8 @@ class Program:
 				"filter_value": None
 			}
 
+			system('clear')
+
 			print("How do you want to sort transactions")
 			print("1: date ascending")
 			print("2: date descending")
@@ -270,7 +277,7 @@ class Program:
 
 			if filt == "1":
 				options['filter_column'] = 'date'
-				options['filter_value'] =  input("Date: ")
+				options['filter_value'] =  input("Date (example " + datetime.now().strftime("%Y-%m-%d") + "): ")
 			elif filt == "2":
 				options['filter_column'] = 'amount'
 				options['filter_command'] = '<='
