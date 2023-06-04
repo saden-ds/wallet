@@ -212,7 +212,7 @@ class Program:
 			for wish in temp_wishlist[:]:
 				if wish.fullprice < price:
 					temp_wishlist.remove(wish)
-
+		system("clear")
 		self.print_wishes(temp_wishlist)
 
 	def __print_transactions(self, options:dict = {}) -> None:
