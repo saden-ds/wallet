@@ -62,15 +62,15 @@ class Program:
 				max_name_len = len(wish.name)
 			if len(wish.date) > max_date_len:
 				max_date_len = len(wish.date)
-			if len(str(wish.fullprice)) > max_fullprice_len:
-				max_fullprice_len = len(str(wish.fullprice))
+			if len(f'{wish.fullprice:.2f}') > max_fullprice_len:
+				max_fullprice_len = len(f'{wish.fullprice:.2f}')
 
 		print(f'+{"-"*(max_name_len+2)}+{"-"*(max_date_len+2)}+{"-"*(max_fullprice_len+2)}+')
 		print(f'| Name{" "*(max_name_len-4)} | Date{" "*(max_date_len-4)} | Full price{" "*(max_fullprice_len-9)}|')
 		print(f'+{"-"*(max_name_len+2)}+{"-"*(max_date_len+2)}+{"-"*(max_fullprice_len+2)}+')
 
 		for wish in self.wish_list.wish_list:
-			print(f'| {wish.name}{" "*(max_name_len-len(wish.name))} | {wish.date}{" "*(max_date_len-len(wish.date))} | {str(wish.fullprice)}{" "*(max_fullprice_len-len(str(wish.fullprice)))} |')
+			print(f"| {wish.name}{' '*(max_name_len-len(wish.name))} | {wish.date}{' '*(max_date_len-len(wish.date))} | {wish.fullprice:.2f}{' '*(max_fullprice_len-len(f'{wish.fullprice:.2f}'))} |")
 		
 		print(f'+{"-"*(max_name_len+2)}+{"-"*(max_date_len+2)}+{"-"*(max_fullprice_len+2)}+')
 			
@@ -92,15 +92,15 @@ class Program:
 		for product in wish.products:
 			if len(product.name) > max_product_name_len:
 				max_product_name_len = len(product.name)
-			if len(str(product.price)) > max_product_price_len:
-				max_product_price_len = len(str(product.price))
+			if len(f'{product.price:.2f}') > max_product_price_len:
+				max_product_price_len = len(f'{product.price:.2f}')
 			if len(str(product.count)) > max_product_count_len:
 				max_product_count_len = len(str(product.count))
 		print(f'+{"-"*(max_product_name_len+2)}+{"-"*(max_product_price_len+2)}+{"-"*(max_product_count_len+2)}+')
 		print(f'| Product name {" "*(max_product_name_len - 13)} | Product price {" "*(max_product_price_len-13)}| Product count {" "*(max_product_count_len-13)}|')
 		print(f'+{"-"*(max_product_name_len+2)}+{"-"*(max_product_price_len+2)}+{"-"*(max_product_count_len+2)}+')
 		for product in wish.products:
-			print(f'| {product.name + " "*(max_product_name_len-len(product.name))} | {str(product.price)+ " "*(max_product_price_len-len(str(product.price)))} | {str(product.count) + " "*(max_product_count_len- len(str(product.count)))} |')
+			print(f'| {product.name + " "*(max_product_name_len-len(product.name))} | {f"{product.price:.2f}"+ " "*(max_product_price_len-len(f"{product.price:.2f}"))} | {str(product.count) + " "*(max_product_count_len- len(str(product.count)))} |')
 		print(f'+{"-"*(max_product_name_len+2)}+{"-"*(max_product_price_len+2)}+{"-"*(max_product_count_len+2)}+')
 
 	def __filter_transactions(self, transactions:list, options:dict = {}) -> list:
