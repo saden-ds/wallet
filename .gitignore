@@ -11,3 +11,5 @@ ehthumbs_vista.db
 __pycache__/
 
 wallet.json
+wish_list.json
+detailed_wish_list.json
