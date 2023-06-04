@@ -4,6 +4,7 @@ from os import system
 from datetime import date, datetime
 import time
 from operator import itemgetter
+from operator import attrgetter
 
 from wish_list import Wishlist
 
@@ -12,7 +13,6 @@ class Program:
 	@staticmethod
 	def run():
 		program = Program()
-
 		system('clear')
 		print("Hello, this is your e-wallet. Let's start using it!")
 		time.sleep(3)
@@ -52,13 +52,13 @@ class Program:
 		else:
 			return " " + str(column_value).ljust(column_len, " ") + " "
 
-	def print_wishes(self) -> None:
+	def print_wishes(self, wishList) -> None:
 
 		max_name_len = 5
 		max_date_len = 5
 		max_fullprice_len = 10
 
-		for wish in self.wish_list.wish_list:
+		for wish in wishList:
 			if len(wish.name) > max_name_len:
 				max_name_len = len(wish.name)
 			if len(wish.date) > max_date_len:
@@ -70,7 +70,7 @@ class Program:
 		print(f'| Name{" "*(max_name_len-4)} | Date{" "*(max_date_len-4)} | Full price{" "*(max_fullprice_len-9)}|')
 		print(f'+{"-"*(max_name_len+2)}+{"-"*(max_date_len+2)}+{"-"*(max_fullprice_len+2)}+')
 
-		for wish in self.wish_list.wish_list:
+		for wish in wishList:
 			print(f"| {wish.name}{' '*(max_name_len-len(wish.name))} | {wish.date}{' '*(max_date_len-len(wish.date))} | {wish.fullprice:.2f}{' '*(max_fullprice_len-len(f'{wish.fullprice:.2f}'))} |")
 		
 		print(f'+{"-"*(max_name_len+2)}+{"-"*(max_date_len+2)}+{"-"*(max_fullprice_len+2)}+')
@@ -151,6 +151,69 @@ class Program:
 				total += amount;
 
 		return total
+
+	def __print_sorted_filtered_wishes(self, sort_option:int, filter_option:int):
+		temp_wishlist = self.wish_list.wish_list[:]
+		if sort_option == 1:
+			temp_wishlist = sorted(temp_wishlist, key = attrgetter('name'))
+		elif sort_option == 2:
+			temp_wishlist = sorted(temp_wishlist, key = attrgetter('name'), reverse=True)
+		elif sort_option == 3:
+			temp_wishlist = sorted(temp_wishlist, key = attrgetter('date'))
+		elif sort_option == 4:
+			temp_wishlist = sorted(temp_wishlist, key = attrgetter('date'), reverse=True)
+		elif sort_option == 5:
+			temp_wishlist = sorted(temp_wishlist, key = attrgetter('fullprice'))
+		elif sort_option == 6:
+			temp_wishlist = sorted(temp_wishlist, key = attrgetter('fullprice'), reverse=True)
+		
+		if filter_option == 1:
+			contains = input("Enter name or part of name: ")
+			for wish in temp_wishlist[:]:
+				if wish.name.count(contains) == 0:
+					temp_wishlist.remove(wish)
+		elif filter_option == 2:
+			date = input("Enter date: ")
+			for wish in temp_wishlist[:]:
+				if not wish.date.split(" ")[0] == date:
+					temp_wishlist.remove(wish)
+		elif filter_option == 3:
+			while True:
+				price = 0
+				try:
+					price = float(input("Enter price: "))
+					if price <= 0:
+						print('Price has to be positive integer or float!')
+						continue
+
+				except:
+					print('Price has to be positive integer or float!')
+					continue
+				break
+
+			for wish in temp_wishlist[:]:
+				if wish.fullprice > price:
+					temp_wishlist.remove(wish)
+
+		elif filter_option == 4:
+			while True:
+				price = 0
+				try:
+					price = float(input("Enter price: "))
+					if price <= 0:
+						print('Price has to be positive integer or float!')
+						continue
+
+				except:
+					print('Price has to be positive integer or float!')
+					continue
+				break
+
+			for wish in temp_wishlist[:]:
+				if wish.fullprice < price:
+					temp_wishlist.remove(wish)
+
+		self.print_wishes(temp_wishlist)
 
 	def __print_transactions(self, options:dict = {}) -> None:
 		system('clear')
@@ -307,10 +370,10 @@ class Program:
 			self.__delete_transaction(date)
 		elif command == "5":
 			system('clear')
-			self.print_wishes()
+			self.print_wishes(self.wish_list.wish_list)
 		elif command == "6":
 			system('clear')
-			self.print_wishes()
+			self.print_wishes(self.wish_list.wish_list)
 			choice = input("Enter wish name to see details: ")
 			if self.wish_list.get_wish(choice) is None:
 				print("Wish does not exist!")
@@ -319,7 +382,51 @@ class Program:
 				self.print_wish(choice)
 
 		elif command == "7":
-			pass
+			sort_option = 0
+			filter_option = 0
+			while True:
+				system('clear')
+				print('How do you want to sort wishes')
+				print('1: Name ascending')
+				print('2: Name descending')
+				print('3: Date ascending')
+				print('4: Date descending')
+				print('5: Full price ascending')
+				print('6: Full price descending')
+				try:
+					sort_option = int(input('Sort: '))
+					if sort_option > 6 or sort_option < 1:
+						print('Input has to be number between 1-6')
+						input('Press Enter to continue...')
+						continue
+				
+				except:
+					print('Input has to be number between 1-6')
+					input('Press Enter to continue...')
+					continue
+				break
+			
+			while True:
+				system('clear')
+				print('How do you want to filter wishes')
+				print('1: Name')
+				print('2: Date')
+				print('3: Full price less then')
+				print('4: Full price greater then')
+				try:
+					filter_option = int(input('Sort: '))
+					if filter_option > 4 or filter_option < 1:
+						print('Input has to be number between 1-4')
+						input('Press Enter to continue...')
+						continue
+				
+				except:
+					print('Input has to be number between 1-4')
+					input('Press Enter to continue...')
+					continue
+				break
+			self.__print_sorted_filtered_wishes(sort_option, filter_option)
+
 	
 		elif command == "8":
 			system('clear')
@@ -368,7 +475,7 @@ class Program:
 
 		elif command == "9":
 			system('clear')
-			self.print_wishes()
+			self.print_wishes(self.wish_list.wish_list)
 			choice = input("Enter wish name to use it: ")
 			if self.wish_list.get_wish(choice) is None:
 				print("Wish does not exist!")
@@ -387,7 +494,7 @@ class Program:
 
 		elif command == "10":
 			system('clear')
-			self.print_wishes()
+			self.print_wishes(self.wish_list.wish_list)
 			choice = input("Enter wish name to delete it: ")
 			if self.wish_list.get_wish(choice) is None:
 				print("Wish does not exist!")
