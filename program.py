@@ -307,7 +307,10 @@ class Program:
 						continue
 					break
 				products.append(Wishlist.create_product(product_name, product_price, product_count))
-			self.wish_list.create_and_add_wish(wish_name, products)
+			if len(products) < 1:
+				print("The wish has to contain at least one product!")
+			else:
+				self.wish_list.create_and_add_wish(wish_name, products)
 
 		elif command == "9":
 			system('clear')
@@ -342,7 +345,8 @@ class Program:
 
 		elif command == "11":
 			return False
-		
+		else:
+			print("Incorrect input!")
 		input('Press Enter to continue...')
 		return True
 
