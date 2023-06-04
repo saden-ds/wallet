@@ -179,7 +179,7 @@ class Program:
 		print("8: Add wish")
 		print("9: Use wish")
 		print("10: Delete wish")
-		print("11: Exit")
+		print("11: Save & Exit")
 
 	def __choose_command(self) -> bool:
 		
