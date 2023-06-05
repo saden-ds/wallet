@@ -414,7 +414,7 @@ class Program:
 				print('3: Full price less then')
 				print('4: Full price greater then')
 				try:
-					filter_option = int(input('Sort: '))
+					filter_option = int(input('Filter: '))
 					if filter_option > 4 or filter_option < 1:
 						print('Input has to be number between 1-4')
 						input('Press Enter to continue...')
